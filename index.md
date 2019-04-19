@@ -6,7 +6,7 @@ click on the following link for the code Review
 
 [click here](https://drive.google.com/open?id=1HguanAmGRlNJasT4RHRdZL9H4Bi3mNg_)
 
-### Artifact 1 - Software Design and Engineering
+   ### Artifact 1 - Software Design and Engineering
 
 ```javascript
 /Dependencies
@@ -187,7 +187,7 @@ switch(process.argv[2]){
 
 }
 ```
-### Narrative 1
+   ### Narrative 1
 
   This artifact is a piece of code I developed in a coding boot camp I attended going to UC Berkeley extension last year January of 2018. This code essentially accesses the twitter, Spotify and omdb api and returns data about them. This was an interesting and fun project as this was our introduction with dealing with apis and how to use them in order to access information.I selected this artifact for my code review as I felt that it best demonstrated my skills in the software and design aspect of my code. It shows how functions were organized and executed within my code. While performing the code review, I found that my code did not have comments. This was the part that I needed to improve within the code. In order to improve the artifact, I commented. The code so that it was more understandable and readable which is an important aspect in any software design.The course objectives were indeed met with this enhancement. I think the code satisfies all the requirements needed. For this particular I think all the requirements are satisfied but if there is anything that needs to be fixed ill fix it. I learned a lot in the process was of enhancing and modifying the artifact. Thinking about the piece of code more about its readability and the ways it should be applicable in a software design aspect was new and a different aspect for me. I thought the way I designed the code was perfect, but I realized that there weren’t any comments while reviewing the code. I learned that code reviews in the design aspect of coding is very important so that one can adhere to the guidelines of designing an application properly. 
 
