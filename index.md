@@ -18,4 +18,5 @@ Having trouble with Pages? Check out our [documentation](https://help.github.com
 
 # Informal Code Review
 
-  [![Watch the video](https://i.imgur.com/vKb2F1B.png)](https://youtu.be/vt5fpE0bzSY)
+ http://img.youtube.com/vi/{video-id}/0.jpg
+
