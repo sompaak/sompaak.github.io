@@ -18,6 +18,6 @@ Having trouble with Pages? Check out our [documentation](https://help.github.com
 
 # Informal Code Review
 
-https://drive.google.com/open?id=1HguanAmGRlNJasT4RHRdZL9H4Bi3mNg_
+[click on the link](https://drive.google.com/open?id=1HguanAmGRlNJasT4RHRdZL9H4Bi3mNg_)
 
 
