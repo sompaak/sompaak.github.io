@@ -191,6 +191,489 @@ switch(process.argv[2]){
 
 }
 ```
+### Narrative 2 - Algorithm and Data Structures 
+
+This artifact belongs to the data structure and algorithms class CS-260. This artifact was essentially created last year. This artifact essentially uses the use of data structures and sorting algorithms. For example, this particular artifact uses quicksort as an algorithm and a hash table as a data structure.I selected this artifact as I felt that it best demonstrated my skills in the data structures and algorithms aspect. It shows how functions were organized and executed within my code. I found that my code did not have comments. This was the part that I nee improved within the code. In order to improve the artifact, I commented the code so that it was more understandable and readable which is an important aspect in any code that is being used at the industry standard.The course objectives were indeed met with this enhancement. I think the code satisfies all the requirements needed. For this in particular I think all the requirements are satisfied but if there is anything that needs to be fixed ill fix it. I learned a lot in the process was of enhancing and modifying the artifact. Thinking about the piece of code more about its readability and the ways it should be applicable in a software design aspect was new and a different aspect for me. I thought the way I designed the code was perfect, but I realized that there weren’t any comments while reviewing the code. I learned that code reviews in the design aspect of coding is very important so that one can adhere to the guidelines of designing an application properly. 
+
+### Artifact 2 - Algorithm and Data Structures
+
+```C++
+//============================================================================
+// Name        : VectorSorting.cpp
+// Author      : Akhil Sompalli
+// Version     : 1.0
+// Copyright   : Copyright © 2017 SNHU COCE
+// Description : Final Project - Vector Sorting Algorithms
+//============================================================================
+
+#include <algorithm>
+#include <iostream>
+#include <time.h>
+
+#include "CSVparser.hpp"
+
+using namespace std;
+
+//============================================================================
+// Global definitions visible to all methods and classes
+//============================================================================
+
+// forward declarations
+double strToDouble(string str, char ch);
+
+// define a structure to hold bid information
+struct Bid {
+    string bidId; // unique identifier
+    string title;
+    string fund;
+    double amount;
+    Bid() {
+        amount = 0.0;
+    }
+};
+
+
+//============================================================================
+// Hash Table class definition
+//============================================================================
+
+/**
+ * Define a class containing data members and methods to
+ * implement a hash table with chaining.
+ */
+class HashTable {
+
+private:
+	struct Node {
+		Bid bid;
+		unsigned int key;
+		Node* nextBidNode;
+
+		Node() {
+			key = UINT_MAX;
+			nextBidNode = nullptr;
+		}
+		Node(Bid abid, unsigned int akey) {
+			bid = abid;
+			key = akey;
+			nextBidNode = nullptr;
+		}
+	};
+
+	vector<Node> nodes;
+	unsigned int tableSize = 0;
+    unsigned int hash(int key);
+
+public:
+    HashTable(int);
+    HashTable();
+    virtual ~HashTable();
+    void Insert(Bid);
+    void PrintAll();
+    void Remove(string);
+    Bid Search(string);
+};
+
+
+HashTable::HashTable(int tableSize) {
+	this->tableSize = tableSize;
+	nodes.resize(tableSize);
+}
+
+
+/**
+ * Default constructor
+ */
+HashTable::HashTable() {
+
+}
+
+
+/**
+ * Destructor
+ */
+HashTable::~HashTable() {
+	nodes.clear();
+}
+
+/**
+ * Calculate the hash value of a given key.
+ * Note that key is specifically defined as
+ * unsigned int to prevent undefined results
+ * of a negative list index.
+ *
+ * @param key The key to hash
+ * @return The calculated hash
+ */
+unsigned int HashTable::hash(int key) {
+	unsigned int hashValue = key % tableSize;
+	return hashValue;
+}
+
+/**
+ * Insert a bid
+ *
+ * @param bid The bid to insert
+ */
+void HashTable::Insert(Bid bid) {
+
+	unsigned int key = hash(atoi(bid.bidId.c_str()));
+
+	Node* currentNode = &(nodes.at(key));
+
+	if (currentNode->key == UINT_MAX) {
+		currentNode->key = key;
+		currentNode->bid = bid;
+		currentNode->nextBidNode = nullptr;
+	}else {
+		// find last node
+		while (currentNode->nextBidNode != nullptr){
+			currentNode = currentNode->nextBidNode;
+		}
+		currentNode->nextBidNode = new Node(bid,key);
+	}
+}
+
+/**
+ * Print all bids
+ */
+void HashTable::PrintAll() {
+	Bid bid;
+	Node* node;
+
+	// loop through the vector
+	for (int i=0; i < tableSize; ++i) {
+
+		// Get the node at i and the bid associated with the node;
+		node = &(nodes.at(i));
+		bid = nodes.at(i).bid;
+
+		if (node->key != UINT_MAX) {
+			bid = node->bid;
+			cout << "Key " << node->key << ": " << " Id: " << bid.bidId << " | " <<  bid.title << " | " << bid.amount << " | " << bid.title << endl;
+		}
+
+		// check for nodes linked to the current node
+		while (node->nextBidNode != nullptr){
+			node = node->nextBidNode;
+			bid = node->bid;
+			cout << "    " << node->key << ": " << " Id: " << bid.bidId << " | " <<  bid.title << " | " << bid.amount << " | " << bid.title << endl;
+
+		}
+	}
+}
+
+/**
+ * Search for the specified bidId
+ *
+ * @param bidId The bid id to search for
+ */
+Bid HashTable::Search(string bidId) {
+    Bid bid;
+
+    // FIXME (8): Implement logic to search for and return a bid
+
+    // calculate key
+    unsigned int key = hash(atoi(bidId.c_str()));
+
+	Node* node = &(nodes.at(key));
+
+	// node found
+	if (node != nullptr && node->key != UINT_MAX && node->bid.bidId.compare(bidId) == 0 ){
+		return node->bid;
+	}
+
+	//node not found
+	if (node == nullptr || node->key == UINT_MAX){
+		return bid;
+	}
+
+	//find in the linked list
+	while (node != nullptr) {
+		if (node->key != UINT_MAX && node->bid.bidId.compare(bidId) == 0){
+			return node->bid;
+		}
+		node = node->nextBidNode;
+	}
+
+    return bid;
+}
+
+
+/**
+ * Partition the vector of bids into two parts, low and high
+ *
+ * @param bids Address of the vector<Bid> instance to be partitioned
+ * @param begin Beginning index to partition
+ * @param end Ending index to partition
+ */
+int partition(vector<Bid>& bids, int begin, int end) {
+	int l = begin;
+	int h = end;
+
+	/* Pick middle element as pivot */
+	int middle = begin + (end - begin) / 2;
+	Bid pivotbid = bids.at(middle);
+
+	bool done = false;
+	while (!done) {
+
+		/* increment l while bids.at(l).title < pivotbid.title */
+		while (bids.at(l).title.compare(pivotbid.title) < 0) {
+			++l;
+		}
+
+		/* decrement h while pivotbid.title < bids.at(h).title */
+		while (pivotbid.title.compare(bids.at(h).title) < 0) {
+			--h;
+		}
+
+		if (l >= h){
+			done = true;
+		}
+		else {
+
+			swap(bids.at(l), bids.at(h));
+
+			++l;
+			--h;
+		}
+	}
+	return h;
+}
+
+/**
+ * Perform a quick sort on bid title
+ * Average performance: O(n log(n))
+ * Worst case performance O(n^2))
+ *
+ * @param bids address of the vector<Bid> instance to be sorted
+ * @param begin the beginning index to sort on
+ * @param end the ending index to sort on
+ */
+void quickSort(vector<Bid>& bids, int begin, int end) {
+	int j = 0;
+
+	/* Base case: If there are 1 or zero elements to sort,partition is already sorted */
+	if (begin >= end){
+		return;
+	}
+
+	/* Partition the data within the array. Value j returned
+	    from partitioning is location of last element in low partition. */
+	j = partition(bids, begin, end);
+
+	/* Recursively sort low partition (i to j) and high partition (j + 1 to k) */
+
+	quickSort(bids, begin, j);
+	quickSort(bids, j + 1, end);
+
+	return;
+
+}
+
+/**
+ * Simple C function to convert a string to a double
+ * after stripping out unwanted char
+ *
+ * credit: http://stackoverflow.com/a/24875936
+ *
+ * @param ch The character to strip out
+ */
+double strToDouble(string str, char ch) {
+    str.erase(remove(str.begin(), str.end(), ch), str.end());
+    return atof(str.c_str());
+}
+
+//============================================================================
+// Static methods used for testing
+//============================================================================
+
+/**
+ * Display the bid information to the console (std::out)
+ *
+ * @param bid struct containing the bid info
+ */
+void displayBid(Bid bid) {
+    cout << bid.bidId << ": " << bid.title << " | " << bid.amount << " | "
+            << bid.fund << endl;
+    return;
+}
+
+/**
+ * Load a CSV file containing bids into a container
+ *
+ * @param csvPath the path to the CSV file to load
+ * @return a container holding all the bids read
+ */
+vector<Bid> loadBids(string csvPath) {
+    cout << "Loading CSV file " << csvPath << endl;
+
+    // Define a vector data structure to hold a collection of bids.
+    vector<Bid> bids;
+
+
+    // initialize the CSV Parser using the given path
+    csv::Parser file = csv::Parser(csvPath);
+
+
+    try {
+        // loop to read rows of a CSV file
+        for (int i = 0; i < file.rowCount(); i++) {
+
+            // Create a data structure and add to the collection of bids
+            Bid bid;
+            bid.bidId = file[i][1];
+            bid.title = file[i][0];
+            bid.fund = file[i][8];
+            bid.amount = strToDouble(file[i][4], '$');
+
+            //cout << "Item: " << bid.title << ", Fund: " << bid.fund << ", Amount: " << bid.amount << endl;
+
+            // push this bid to the end
+            bids.push_back(bid);
+        }
+    } catch (csv::Error &e) {
+        std::cerr << e.what() << std::endl;
+    }
+
+    return bids;
+}
+
+
+HashTable* getHashTable(vector<Bid>& bids) {
+
+
+	HashTable* hTable = new HashTable(bids.size());
+
+	for (int i = 0; i < bids.size(); ++i) {
+
+			hTable->Insert(bids[i]);
+
+	}
+
+	return hTable;
+}
+
+
+/**
+ * The one and only main() method
+ */
+int main(int argc, char* argv[]) {
+
+
+    // process command line arguments
+    string csvPath, bidKey;
+    switch (argc) {
+    case 2:
+        csvPath = argv[1];
+        bidKey = "98109";
+        break;
+    case 3:
+        csvPath = argv[1];
+        bidKey = argv[2];
+        break;
+    default:
+        csvPath = "eBid_Monthly_Sales.csv";
+        bidKey = "98109";
+    }
+
+
+    // Define a vector to hold all the bids
+    vector<Bid> bids;
+
+    Bid bid;
+
+    HashTable* bidTable;
+
+    // Define a timer variable
+    clock_t ticks;
+
+    int choice = 0;
+    while (choice != 9) {
+        cout << "Menu:" << endl;
+        cout << "  1. Load Bids" << endl;
+        cout << "  2. Display All Bids" << endl;
+        cout << "  3. Find Bid by BidId" << endl;
+        cout << "  4. Sort by Bid Title" << endl;
+        cout << "  9. Exit" << endl;
+        cout << "Enter choice: ";
+        cin >> choice;
+
+        switch (choice) {
+
+        case 1:
+            // Initialize a timer variable before loading bids
+            ticks = clock();
+
+            // Complete the method call to load the bids
+            bids = loadBids(csvPath);
+
+            cout << bids.size() << " bids read" << endl;
+
+            // Calculate elapsed time and display result
+            ticks = clock() - ticks; // current clock ticks minus starting clock ticks
+            cout << "time: " << ticks << " clock ticks" << endl;
+            cout << "time: " << ticks * 1.0 / CLOCKS_PER_SEC << " seconds" << endl;
+
+            break;
+
+        case 2:
+            // Loop and display the bids read
+            for (int i = 0; i < bids.size(); ++i) {
+                displayBid(bids[i]);
+            }
+            cout << endl;
+
+            break;
+
+        case 3:
+            ticks = clock();
+
+            ticks = clock() - ticks; // current clock ticks minus starting clock ticks
+
+            //bidTable = new HashTable(bids.size());
+
+            	//loadBidTableFromVector(bidTable, bids);
+
+            bidTable = getHashTable(bids);
+
+
+            	bid = bidTable->Search(bidKey);
+
+
+            if (!bid.bidId.empty()) {
+                displayBid(bid);
+            } else {
+                cout << "Bid Id " << bidKey << " not found." << endl;
+            }
+
+            cout << "time: " << ticks << " clock ticks" << endl;
+            cout << "time: " << ticks * 1.0 / CLOCKS_PER_SEC << " seconds" << endl;
+            break;
+
+        case 4:
+        		// Initialize a timer variable before loading bids
+			ticks = clock();
+
+			quickSort(bids, 0, bids.size() -1);
+
+			cout << bids.size() << " bids read" << endl;
+
+			ticks = clock() - ticks;
+			cout << "time: " << ticks << "clock ticks" << endl;
+			cout << "time: " << ticks * 1.0 / CLOCKS_PER_SEC << " seconds" << endl;
+
+			break;
+
+        }
+    }
+
+    cout << "Good bye." << endl;
+
+    return 0;
+}
+```
 
 
 
