@@ -193,7 +193,7 @@ switch(process.argv[2]){
 ```
 ### Narrative 2 - Algorithm and Data Structures 
 
-This artifact belongs to the data structure and algorithms class CS-260. This artifact was essentially created last year. This artifact essentially uses the use of data structures and sorting algorithms. For example, this particular artifact uses quicksort as an algorithm and a hash table as a data structure.I selected this artifact as I felt that it best demonstrated my skills in the data structures and algorithms aspect. It shows how functions were organized and executed within my code. I found that my code did not have comments. This was the part that I nee improved within the code. In order to improve the artifact, I commented the code so that it was more understandable and readable which is an important aspect in any code that is being used at the industry standard.The course objectives were indeed met with this enhancement. I think the code satisfies all the requirements needed. For this in particular I think all the requirements are satisfied but if there is anything that needs to be fixed ill fix it. I learned a lot in the process was of enhancing and modifying the artifact. Thinking about the piece of code more about its readability and the ways it should be applicable in a software design aspect was new and a different aspect for me. I thought the way I designed the code was perfect, but I realized that there weren’t any comments while reviewing the code. I learned that code reviews in the design aspect of coding is very important so that one can adhere to the guidelines of designing an application properly. 
+	The artifact below belongs to the data structure and algorithms class CS-260. This artifact was essentially created last year. This artifact essentially uses the use of data structures and sorting algorithms. For example, this particular artifact uses quicksort as an algorithm and a hash table as a data structure.I selected this artifact as I felt that it best demonstrated my skills in the data structures and algorithms aspect. It shows how functions were organized and executed within my code. I found that my code did not have comments. This was the part that I nee improved within the code. In order to improve the artifact, I commented the code so that it was more understandable and readable which is an important aspect in any code that is being used at the industry standard.The course objectives were indeed met with this enhancement. I think the code satisfies all the requirements needed. For this in particular I think all the requirements are satisfied but if there is anything that needs to be fixed ill fix it. I learned a lot in the process was of enhancing and modifying the artifact. Thinking about the piece of code more about its readability and the ways it should be applicable in a software design aspect was new and a different aspect for me. I thought the way I designed the code was perfect, but I realized that there weren’t any comments while reviewing the code. I learned that code reviews in the design aspect of coding is very important so that one can adhere to the guidelines of designing an application properly. 
 
 ### Artifact 2 - Algorithm and Data Structures
 
@@ -674,6 +674,167 @@ int main(int argc, char* argv[]) {
     return 0;
 }
 ```
+### Narrative 3 - Database
+
+	This artifact belongs to the CS-340-Q3079 Advanced Programming Concepts.This artifact was essentially a few moths ago. This artifact essentially uses the use of mongo DB. For example, this particular artifact uses mongo DB in order to query the data base in order to obtain information as well as using curl commands in order to do so.I selected this artifact as I felt that it best demonstrated my skills in the database aspect. It shows how functions were organized and executed within my code. I found that my code did not have comments. This was the part that I needed improved within the code. In order to improve the artifact, I commented the code so that it was more understandable and readable which is an important aspect in any code that is being used at the industry standard.The course objectives were indeed met with this enhancement. I think the code satisfies all the requirements needed. For this in particular I think all the requirements are satisfied but if there is anything that needs to be fixed ill fix it. I learned a lot in the process was of enhancing and modifying the artifact. Thinking about the piece of code more about its readability and the ways it should be applicable in a software design aspect was new and a different aspect for me. I thought the way I designed the code was perfect, but I realized that there weren’t any comments while reviewing the code. I learned that code reviews in the design aspect of coding is very important so that one can adhere to the guidelines of designing an application properly.
+	
+### Artifact 3 - Database
+
+``` python
+# coding: utf-8
+import json
+import pymongo
+import datetime
+from bson import json_util
+import bottle
+from bottle import Bottle, route, run, request, abort
+
+myclient = pymongo.MongoClient()
+db = myclient["market"]
+mycol = db["stocks"]
+
+#___________________________________________________________________________________________________________
+# PART 2 DOCUMENT MANIPULATION
+def insert(val):
+  x = mycol.insert_one(val)
+  print("INSERTED: ", x)
+def find(key,value):
+  for x in mycol.find({key:value}):
+    print("FOUND: " , x)
+    
+def update(query,updated):
+  y = mycol.update_one(query, updated)
+  print("UPDATED : " ,  y)
+  
+def delete(delete_item):
+  z = mycol.delete_many(delete_item)
+  print("DELETED: " , z)
+#_______________________________________________________________________________________________________________
+
+# PART 3 DOCUMENT RETRIEVAL
+def movingAverage(low , high):
+  for m in mycol.find( { "50-Day Simple Moving Average": { "$lt": high , "$gt":low} },{"Ticker": 1 , "50-Day Simple Moving Average":1} ): 
+    print(m)
+    
+def industry(industryName):
+  for x in mycol.find({"Industry":industryName},{"Industry":1 , "Ticker":1}):
+    print("FOUND: " , x)
+    
+    
+def aggregate():
+
+  pipe = [
+
+    {"$match":{
+       "Sector": {"$eq": "Healthcare"}
+      }
+    },
+
+    {"$group":{
+    "_id": "$Industry",
+    "industry": {"$first" : '$Industry'},
+    "Total Shares Outstanding":{"$sum":"$Shares Outstanding"}
+    }}  
+  ]
+  
+  for doc in db.stocks.aggregate(pipe):
+    print(doc)
+  
+#______________________________________________________________________________________________________________________
+
+# PART 4 ADVANCED PROGRAMMING PROJECT
+
+@route("/stocks/api/v1.0/createStock/AA", method='POST')
+def create():
+  data = request.json 
+  x = mycol.insert_one(data)
+  print("INSERTED: ", x)
+  
+  
+@route("/stocks/api/v1.0/getStock/AA", method='GET')
+def read():
+  Ticker = request.query.Ticker
+  for x in mycol.find({"Ticker":Ticker}):
+    print("FOUND: " , x)
+    
+@route("/stocks/api/v1.0/updateStock/AA" , method="GET")
+def updated():
+  query = { "Ticker" : request.query.Ticker}
+  update_values = {"$set":{"Ticker":request.query.Ticker}}
+  y = mycol.update_one(query, update_values)
+  print("UPDATED : " ,  y)
+  return query
+
+
+@route("/stocks/api/v1.0/deleteStock/AA" , method="GET")
+def deletion():
+  Ticker = request.query.Ticker
+  z = mycol.delete_many({"Ticker" : Ticker})
+  print("DELETED: " , z)
+  
+@route("/stocks/api/v1.0/stockReport" , method = "POST")
+def stockReport():
+  tickerSymbolsJson=request.json  
+  tickerSymbols = tickerSymbolsJson['symbols'].split(",")
+  x = mycol.find({"Ticker":{"$in":tickerSymbols}},{"Ticker": 1 , "Industry": 1, "Sector":1})
+  for y in x:
+    print y
+    
+@route("/stocks/api/v1.0/industryReport/telecom" , method = "GET")
+def fiveTopStocks():
+  industry = request.query.Industry
+  for data in db.stocks.find({ "$text": { "$search": industry}},{"Ticker": 1, "Industry":1, "Price":1 }).sort([("Price", -1)]).limit(5):
+    print data
+  
+#________________________________________________________________________________________________________________________________________
+    
+    
+
+    
+def main():
+ 
+  #     val = {"id":"20032-2017-ACME", 
+#           "certificate_number":"9998888",
+#           "business_name":"ACME Explosives",
+#           "date":datetime.datetime.now(),
+#           "result" : "Business Padlocked",
+#           "sector":"Explosive Retail Dealer – 999",
+#           "address":{"number":"1721",
+#                    "street":"Boom Road",
+#                    "city":"BRONX",
+#                    "zip":"10463"}}
+#   insert(val)
+
+#   key = "business_name"
+#   value = "ACME Explosives"
+#   find(key , value)  
+  
+#   query = { "Ticker" : "ABV"}
+#   updated = {"$set":{"Volume":25}}
+#   update(query,updated)
+  
+#   delete_item = { "Ticker":"BRLI" }
+#   delete(delete_item)
+#   
+#   low = 0.005
+#   high = 0.006
+#   movingAverage(low, high)
+
+  
+#   industryName = "Medical Laboratories & Research"
+#   industry(industryName)
+  
+
+#   aggregate()
+ 
+
+   run(host='localhost', port=8081)
+  
+main()
+
+```
+
+
 
 
 
