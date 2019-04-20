@@ -191,6 +191,8 @@ switch(process.argv[2]){
 
 }
 ```
+______________________________________________________________________________________________________________________________
+
 
 ### Narrative 2 - Algorithm and Data Structures 
 
@@ -675,6 +677,9 @@ int main(int argc, char* argv[]) {
     return 0;
 }
 ```
+______________________________________________________________________________________________________________________________
+
+
 ### Narrative 3 - Database
 
 This artifact belongs to the CS-340-Q3079 Advanced Programming Concepts.This artifact was essentially a few moths ago. This artifact essentially uses the use of mongo DB. For example, this particular artifact uses mongo DB in order to query the data base in order to obtain information as well as using curl commands in order to do so.I selected this artifact as I felt that it best demonstrated my skills in the database aspect. It shows how functions were organized and executed within my code. I found that my code did not have comments. This was the part that I needed improved within the code. In order to improve the artifact, I commented the code so that it was more understandable and readable which is an important aspect in any code that is being used at the industry standard.The course objectives were indeed met with this enhancement. I think the code satisfies all the requirements needed. For this in particular I think all the requirements are satisfied but if there is anything that needs to be fixed ill fix it. I learned a lot in the process was of enhancing and modifying the artifact. Thinking about the piece of code more about its readability and the ways it should be applicable in a software design aspect was new and a different aspect for me. I thought the way I designed the code was perfect, but I realized that there weren’t any comments while reviewing the code. I learned that code reviews in the design aspect of coding is very important so that one can adhere to the guidelines of designing an application properly. llalalala
