@@ -1,4 +1,10 @@
 ## CS 499 Final Project - Akhil Sompalli
+## Professional Self-Assessment: 
+
+I feel that the coursework throughout my undergraduate computer science program has really given me an understanding as to what computer science is as a subject and field of study. Through the many courses I have gained skills in java, python, c++, data structures and algorithms, mysql, mongo db, mobile programming, OpenGL, and API's. All of these concepts have taught me how to use computer science for developing future projects and using this skills in the profession I choose within this field. The the three fundamental areas of computer science are covered in my artifacts. These artifacts are data structures and algorithms, software engineering and database. These three areas best demonstrate my skills in applying the fundamnetals of computer science design and principles.
+
+
+
 
 ## Informal Code Review
 
