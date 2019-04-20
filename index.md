@@ -204,7 +204,7 @@ The artifact below belongs to the data structure and algorithms class CS-260. Th
 
 ### Artifact 2 - Algorithm and Data Structures
 
-```C++
+```C
 //============================================================================
 // Name        : VectorSorting.cpp
 // Author      : Akhil Sompalli
